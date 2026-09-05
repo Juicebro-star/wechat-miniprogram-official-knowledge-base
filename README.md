@@ -16,7 +16,7 @@
       <a href="https://github.com/Juicebro-star/vibecoding-base-skill">查看配套 Skill</a>
     </td>
     <td align="center" valign="top" width="32%">
-      <a href="public/assets/juicebro-wechat-qr.png"><img src="public/assets/juicebro-wechat-qr.png" width="170" alt="果汁哥微信二维码" /></a><br />
+      <a href="assets/juicebro-wechat-qr.png"><img src="assets/juicebro-wechat-qr.png" width="170" alt="果汁哥微信二维码" /></a><br />
       <sub>扫码添加微信 · 私信申请加入 AI 交流群</sub>
     </td>
   </tr>
@@ -131,12 +131,6 @@ AI_CONTEXT.md
 本仓库只包含官方文档快照、官方公开链接、转换后的 Markdown、原始 HTML 和公开图片资产，不包含应用源码、凭证、AppID、私有接口、聊天记录、个人资料或其他项目上下文。
 
 文档和相关素材仍受各自权利人适用的版权、商标、服务条款和再发布规则约束。本仓库不附带会误导使用者的宽松许可证；对外使用前请自行确认相应内容和素材的授权边界。
-
-## 加入 AI 交流群
-
-扫码添加微信 · 私信申请加入 AI 交流群
-
-![果汁哥微信二维码](assets/juicebro-wechat-qr.png)
 
 ## 贡献
 
