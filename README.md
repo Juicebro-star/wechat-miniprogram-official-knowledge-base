@@ -5,6 +5,22 @@
 这个项目把微信官方文档入口下的框架资料整理成可检索的 Markdown 页面、原始 HTML 快照和图片资产，让 AI 可以先理解官方平台规则，再结合具体应用仓库进行需求分析、方案设计、代码修改和验证。
 
 > 本仓库是独立的资料归档与 AI Coding 适配项目，不是微信或腾讯官方仓库，也不代表官方立场。平台规则和当前版本应以官方页面为准。
+<table>
+  <tr>
+    <td valign="top" width="68%">
+      <strong>欢迎交流</strong><br />
+      如果你在使用 Vibe Coding、AI Coding 或这个 Skill 的过程中有想法，欢迎联系果汁哥。<br /><br />
+      <strong>微信号：</strong><code>guozhige2024</code><br />
+      果汁哥有 AI 交流群，欢迎私信说明来意，申请加入。<br /><br />
+      <a href="https://vibecoding.tan-xin.com/">访问 vibecoding base</a> ·
+      <a href="https://github.com/Juicebro-star/vibecoding-base-skill">查看配套 Skill</a>
+    </td>
+    <td align="center" valign="top" width="32%">
+      <a href="public/assets/juicebro-wechat-qr.png"><img src="public/assets/juicebro-wechat-qr.png" width="170" alt="果汁哥微信二维码" /></a><br />
+      <sub>扫码添加微信 · 私信申请加入 AI 交流群</sub>
+    </td>
+  </tr>
+</table>
 
 ## 现在能做什么
 
