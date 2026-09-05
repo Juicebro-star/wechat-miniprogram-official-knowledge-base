@@ -5,3 +5,4 @@
 - Archived 305 pages from the official WeChat Mini Program framework documentation tree.
 - Added Markdown pages, raw HTML snapshots, image assets, manifests, and a public AI Coding context.
 - Added repository-level `AGENTS.md`, `AI_CONTEXT.md`, `README.md`, and contribution boundaries.
+- Added the public community contact QR code and README entry for joining the AI discussion group.
