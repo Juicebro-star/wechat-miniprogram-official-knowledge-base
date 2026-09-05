@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>小程序音视频通话 SDK (Linux 设备) | 微信开放文档</title>
+    <meta name="description" content="微信开发者平台文档">
+    <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="keywords" content="微信官方文档">
+  <link rel="shortcut icon" type="image/x-icon" href="https://res.wx.qq.com/a/wx_fed/assets/res/NTI4MWU5.ico">
+  <link rel="mask-icon" color="#4C4C4C" href="https://res.wx.qq.com/a/wx_fed/assets/res/MjliNWVm.svg">
+  <link rel="apple-touch-icon-precomposed" href="https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png">
+  <script>
+(function () {
+  'use strict';
+
+  const SCRIPT_URLs = [
+      'https://dldir1.qq.com/WechatWebDev/devPlatform/px.min.js',
+      'https://dev.weixin.qq.com/platform-console/proxy/assets/tel/px.min.js',
+  ];
+  const param = {
+      maskMode: 'no-mask', // 隐私策略, all-mask 或 no-mask, 详见：https://dev.weixin.qq.com/docs/analysis/sdk/docs.html
+      recordCanvas: false,  // 若要采集canvas, 设为true
+      projectId: 'wxef34f91ddab0c534-0HLdQNKAk-dzsFsA', // 项目 ID，需替换为体验分析项目 ID
+      iframe: false, // 是否采集 iframe 页面
+      console: true, // 是否采集 console 输出的错误日志
+      network: true, // 是否采集网络错误
+  };
+  function loadScript(url) {
+      return new Promise((resolve, reject) => {
+          const scriptEle = document.createElement('script');
+          scriptEle.type = 'text/javascript';
+          scriptEle.async = true;
+          scriptEle.src = url;
+          scriptEle.onload = () => {
+              resolve(url);
+          };
+          scriptEle.onerror = () => {
+              reject(new Error('Script load error'));
+          };
+          document.head.appendChild(scriptEle);
+      });
+  }
+  async function main() {
+      try {
+          sessionStorage.setItem('wxobs_start_timestamp', String(Date.now()));
+          const fastestUrl = await Promise.race(SCRIPT_URLs.map(url => loadScript(url)));
+          window.__startPX && window.__startPX(param);
+      }
+      catch (error) {
+          console.error('Error loading scripts:', error);
+      }
+  }
+  main();
+
+})();
+        </script>
+    
+    <link rel="preload" href="https://res.wx.qq.com/wxdoc/dist/assets/css/0.styles.c571138b.css" as="style"><link rel="preload" href="https://res.wx.qq.com/wxdoc/dist/assets/js/app.4ab8ee8b.js" as="script"><link rel="preload" href="https://res.wx.qq.com/wxdoc/dist/assets/js/2493.7b3d4c50.js" as="script">
+    <link rel="stylesheet" href="https://res.wx.qq.com/wxdoc/dist/assets/css/0.styles.c571138b.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><div class="theme-container"><header class="navbar navbar_with-link"><div class="navbar__left"><a href="/doc/" class="home-link"><div class="logo__wrp"><span class="logo__icon"></span></div></a> <span class="dot"></span> <div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">小程序</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item selected"><!----> <a href="/miniprogram/dev/framework/" class="nav-link external">
+  小程序
+</a></li><li class="dropdown-item"><!----> <a href="/minigame/introduction/" class="nav-link external">
+  小游戏
+</a></li><li class="dropdown-item"><!----> <a href="/doc/subscription/guide/" class="nav-link external">
+  公众号
+</a></li><li class="dropdown-item"><!----> <a href="/doc/service/guide/" class="nav-link external">
+  服务号
+</a></li><li class="dropdown-item"><!----> <a href="/doc/oplatform/open/intro.html" class="nav-link external">
+  开放平台
+</a></li><li class="dropdown-item"><!----> <a href="https://work.weixin.qq.com/api/doc" class="nav-link external">
+  企业微信
+</a></li><li class="dropdown-item"><!----> <a href="https://pay.weixin.qq.com/doc/v3/merchant/4012062524" class="nav-link external">
+  微信支付
+</a></li><li class="dropdown-item"><!----> <a href="/doc/channels/" class="nav-link external">
+  视频号
+</a></li><li class="dropdown-item"><!----> <a href="/doc/store/shop/" class="nav-link external">
+  微信小店
+</a></li><li class="dropdown-item"><!----> <a href="/doc/aispeech/platform/INTRODUCTION.html" class="nav-link external">
+  智能对话
+</a></li><li class="dropdown-item"><!----> <a href="/doc/xwei/xiaowei-introduction/Introduction.html" class="nav-link external">
+  腾讯小微
+</a></li><li class="dropdown-item"><!----> <a href="/doc/edu/introduction.html" class="nav-link external">
+  教育平台
+</a></li></ul></div></div> <div class="navbar__center"><nav class="nav-links"><div class="nav-item selected"><a href="/miniprogram/dev/framework/" class="nav-link external">
+  开发
+</a></div><div class="nav-item"><a href="/miniprogram/introduction/" class="nav-link external">
+  介绍
+</a></div><div class="nav-item"><a href="/miniprogram/design/" class="nav-link external">
+  设计
+</a></div><div class="nav-item"><a href="/miniprogram/product/" class="nav-link external">
+  运营
+</a></div><div class="nav-item"><a href="/miniprogram/analysis/wedata/intro/" class="nav-link external">
+  数据
+</a></div><div class="nav-item"><a href="/miniprogram/security/basic/" class="nav-link external">
+  安全
+</a></div></nav></div> <div class="navbar__right"><nav class="nav-links"><div class="nav-item community-item"><a href="https://developers.weixin.qq.com/community/develop/mixflow" target="_blank" class="nav-link external">
+  社区
+</a></div><div class="nav-item community-item"><a href="https://developers.weixin.qq.com/community/business" target="_blank" class="nav-link external">
+  学堂
+</a></div></nav> <ul class="lang-tab"><li class="lang-tab__icon"><img src="https://res.wx.qq.com/t/components/icons/base/translate_regular.svg"></li></ul> <div class="search__wrp-flex"><div class="search__input"><div class="weui-desktop-search"><button class="weui-desktop-icon-btn weui-desktop-search__btn weui-desktop-icon-btn__width"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.4529 16.4014C14.2428 17.4001 12.6915 18 11 18C7.134 18 4 14.866 4 11C4 7.134 7.134 4 11 4C14.866 4 18 7.134 18 11C18 12.7425 17.3633 14.3363 16.3099 15.5614L20.4243 19.6757L19.5757 20.5243L15.4529 16.4014ZM16.8 11C16.8 14.2033 14.2033 16.8 11 16.8C7.79674 16.8 5.2 14.2033 5.2 11C5.2 7.79676 7.79674 5.20001 11 5.20001C14.2033 5.20001 16.8 7.79676 16.8 11Z" fill="black"></path></svg></button></div> <a href="javascript:;" class="search-back__btn">取消</a></div> <div class="reco-list__wrp" style="display:none;"><ul class="reco__list"></ul> <div class="show-more"><a href="/doc/search?source=more&amp;query=&amp;doc_type=miniprogram&amp;jumpbackUrl=%2Fdoc%2F" class="reco-item__link">查看更多 </a></div></div> <div class="reco-list__wrp" style="display:none;"><div class="show-more"><a href="/doc/search?source=more&amp;query=&amp;doc_type=miniprogram&amp;jumpbackUrl=%2Fdoc%2F" class="reco-item__link">在小程序下暂无结果，查看其它业务相关内容 &gt; </a></div></div></div></div></header> <div class="subnavbar"><ul class="subnavbar__list"><li class="subnavbar__item selected" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/framework/" target="_self" class="router-link-active">
+          指南
+          </a> <!----></div> <!----></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/reference/" target="_self">
+          框架
+          </a> <!----></div> <!----></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/component/" target="_self">
+          组件
+          </a> <!----></div> <!----></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/api/" target="_self">
+          API
+          </a> <!----></div> <!----></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/server/API/" target="_self">
+          服务端
+          </a> <!----></div> <!----></li><li class="subnavbar__item dropdown-subnavbar" style="display:;"><div class="dropdown-subnavbar-title"><a>平台能力</a> <span class="arrow right dropdown-subnavbar-select"></span></div> <ul class="dropdown-subnavbar-ul"><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/industry/" target="_self" class="nav-link external">
+            行业能力
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/business-capabilities/" target="_self" class="nav-link external">
+            商业能力
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/miniapp/intro/intro" target="_self" class="nav-link external">
+            多端能力
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/service-market/" target="_self" class="nav-link external">
+            服务市场
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/cityservice/" target="_self" class="nav-link external">
+            城市服务
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/charge/" target="_self" class="nav-link external">
+            付费能力
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/platform-capabilities/extended/" target="_self" class="nav-link external">
+            拓展能力
+          </a></li></ul></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/devtools/devtools" target="_self">
+          工具
+          </a> <!----></div> <!----></li><li class="subnavbar__item dropdown-subnavbar" style="display:;"><div class="dropdown-subnavbar-title"><a>云服务</a> <span class="arrow right dropdown-subnavbar-select"></span></div> <ul class="dropdown-subnavbar-ul"><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/wxcloudservice/wxcloud/basis/getting-started" target="_self" class="nav-link external">
+            云开发
+          </a></li><li class="dropdown-item" style="display:;"><a href="/miniprogram/dev/wxcloudservice/wxcloudrun/src/" target="_self" class="nav-link external">
+            云托管
+          </a></li></ul></li><li class="subnavbar__item" style="display:;"><div class="dropdown-subnavbar-title"><a href="/miniprogram/dev/ai/guide" target="_self">
+          AI 能力
+          </a> <!----></div> <!----></li></ul></div> <div class="mobile-links__wrp"><div class="mobile-links_mobile"><a href="javascript:;" class="mobile-links__btn">开发</a></div> <div class="mobile-links__panel"><div class="links-panel__bd"><nav class="nav-links"><div class="nav-item selected"><a href="/miniprogram/dev/framework/" class="nav-link external">
+  开发
+</a></div><div class="nav-item"><a href="/miniprogram/introduction/" class="nav-link external">
+  介绍
+</a></div><div class="nav-item"><a href="/miniprogram/design/" class="nav-link external">
+  设计
+</a></div><div class="nav-item"><a href="/miniprogram/product/" class="nav-link external">
+  运营
+</a></div><div class="nav-item"><a href="/miniprogram/analysis/wedata/intro/" class="nav-link external">
+  数据
+</a></div><div class="nav-item"><a href="/miniprogram/security/basic/" class="nav-link external">
+  安全
+</a></div></nav></div> <div class="links-panel__ft"><ul class="lang-tab"><li class="lang-tab__icon"><img src="https://res.wx.qq.com/t/components/icons/base/translate_regular.svg"></li></ul></div></div> <div><div class="weui-mask" style="display:none;"></div> <div class="weui-actionsheet "><!----> <div class="weui-actionsheet__menu"><div class="weui-actionsheet__cell">中文</div><div class="weui-actionsheet__cell">EN</div></div> <div class="weui-actionsheet__action"><div class="weui-actionsheet__cell">取消</div></div></div></div></div> <a href="javascript:;" class="mobile-search-btn"></a> <div class="main-container" style="margin-top:144px;"><div class="main-contontaier__bd" style="min-height:0px;"><div class="sidebar__wrp"><div class="sidebar-cell_mobile"><li class="subnavbar__item selected"><a href="javascript:;" target="_self">指南</a></li></div> <aside class="sidebar" style="top:144px;"> <div class="TreeNavigation"><div class="NavigationLevel NavigationLevel--level-0"><ul><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/" class="NavigationItem__router-link">
+      起步
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/" class="NavigationItem__router-link">
+      小程序简介
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/#小程序技术发展史" class="NavigationItem__router-link">
+      小程序技术发展史
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/#小程序与普通网页开发的区别" class="NavigationItem__router-link">
+      小程序与普通网页开发的区别
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/#体验小程序" class="NavigationItem__router-link">
+      体验小程序
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/getstart.html" class="NavigationItem__router-link">
+      开始
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/getstart.html#申请账号" class="NavigationItem__router-link">
+      申请账号
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/getstart.html#安装开发工具" class="NavigationItem__router-link">
+      安装开发工具
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/getstart.html#你的第一个小程序" class="NavigationItem__router-link">
+      你的第一个小程序
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/getstart.html#编译预览" class="NavigationItem__router-link">
+      编译预览
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html" class="NavigationItem__router-link">
+      小程序代码构成
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#JSON-配置" class="NavigationItem__router-link">
+      JSON 配置
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#小程序配置-app.json" class="NavigationItem__router-link">
+      小程序配置 app.json
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#工具配置-project.config.json" class="NavigationItem__router-link">
+      工具配置 project.config.json
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#页面配置-page.json" class="NavigationItem__router-link">
+      页面配置 page.json
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#JSON-语法" class="NavigationItem__router-link">
+      JSON 语法
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#WXML-模板" class="NavigationItem__router-link">
+      WXML 模板
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#WXSS-样式" class="NavigationItem__router-link">
+      WXSS 样式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#JS-逻辑交互" class="NavigationItem__router-link">
+      JS 逻辑交互
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/code.html#程序" class="NavigationItem__router-link">
+      程序
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html" class="NavigationItem__router-link">
+      小程序协同工作和发布
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#协同工作" class="NavigationItem__router-link">
+      协同工作
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#小程序成员管理" class="NavigationItem__router-link">
+      小程序成员管理
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#小程序的版本" class="NavigationItem__router-link">
+      小程序的版本
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#发布上线" class="NavigationItem__router-link">
+      发布上线
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#预览" class="NavigationItem__router-link">
+      预览
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#上传代码" class="NavigationItem__router-link">
+      上传代码
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#提交审核" class="NavigationItem__router-link">
+      提交审核
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#发布" class="NavigationItem__router-link">
+      发布
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#小程序码" class="NavigationItem__router-link">
+      小程序码
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/quickstart/release.html#运营数据" class="NavigationItem__router-link">
+      运营数据
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/structure.html" class="NavigationItem__router-link">
+      目录结构
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/config.html" class="NavigationItem__router-link">
+      小程序配置
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/config.html#全局配置" class="NavigationItem__router-link">
+      全局配置
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/config.html#页面配置" class="NavigationItem__router-link">
+      页面配置
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/MINA.html" class="NavigationItem__router-link">
+      小程序框架
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/MINA.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/" class="NavigationItem__router-link">
+      逻辑层
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/app.html" class="NavigationItem__router-link">
+      注册小程序
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/page.html" class="NavigationItem__router-link">
+      注册页面
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/module.html" class="NavigationItem__router-link">
+      模块化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/api.html" class="NavigationItem__router-link">
+      API
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/scene.html" class="NavigationItem__router-link">
+      场景值
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/" class="NavigationItem__router-link">
+      视图层
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/wxml/" class="NavigationItem__router-link">
+      WXML
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/wxss.html" class="NavigationItem__router-link">
+      WXSS
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/wxs/" class="NavigationItem__router-link">
+      WXS
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/component.html" class="NavigationItem__router-link">
+      基础组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/wxml/event.html" class="NavigationItem__router-link">
+      事件
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/env.html" class="NavigationItem__router-link">
+      小程序运行时
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/env.html" class="NavigationItem__router-link">
+      运行环境
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/js-support.html" class="NavigationItem__router-link">
+      JavaScript 支持情况
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/operating-mechanism.html" class="NavigationItem__router-link">
+      运行机制
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/update-mechanism.html" class="NavigationItem__router-link">
+      更新机制
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/rendering.html" class="NavigationItem__router-link">
+      界面渲染
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/rendering.html" class="NavigationItem__router-link">
+      界面渲染架构
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/page-relation.html" class="NavigationItem__router-link">
+      页面间关系
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/page-relation.html" class="NavigationItem__router-link">
+      页面间关系与通信
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/route.html" class="NavigationItem__router-link">
+      页面路由
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/route-event-listener.html" class="NavigationItem__router-link">
+      页面路由监听
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/app-service/route-rewrite.html" class="NavigationItem__router-link">
+      路由事件重写
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/tap.html" class="NavigationItem__router-link">
+      触摸与点击事件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/animation.html" class="NavigationItem__router-link">
+      动画
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/initial-rendering-cache.html" class="NavigationItem__router-link">
+      初始渲染缓存
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/selector.html" class="NavigationItem__router-link">
+      获取界面上的节点信息
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/frameset.html" class="NavigationItem__router-link">
+      分栏模式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/resizable.html" class="NavigationItem__router-link">
+      响应显示区域变化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/interactive-animation.html" class="NavigationItem__router-link">
+      WXS 响应事件
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/" class="NavigationItem__router-link">
+      组件框架
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/" class="NavigationItem__router-link">
+      组件化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/scripting.html" class="NavigationItem__router-link">
+      组件脚本
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/using-components.html" class="NavigationItem__router-link">
+      引用组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/component-system.html" class="NavigationItem__router-link">
+      组件框架模型
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/properties.html" class="NavigationItem__router-link">
+      组件属性
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/lifetimes.html" class="NavigationItem__router-link">
+      组件生命周期
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/behaviors.html" class="NavigationItem__router-link">
+      behaviors
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/style.html" class="NavigationItem__router-link">
+      样式控制
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/style.html" class="NavigationItem__router-link">
+      组件样式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/external-classes.html" class="NavigationItem__router-link">
+      引用外部样式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/virtual-host.html" class="NavigationItem__router-link">
+      虚拟组件节点
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/event-system.html" class="NavigationItem__router-link">
+      事件系统
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/event-system.html" class="NavigationItem__router-link">
+      触发与监听事件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/event-binding.html" class="NavigationItem__router-link">
+      事件绑定
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/event-object.html" class="NavigationItem__router-link">
+      事件对象
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/interaction.html" class="NavigationItem__router-link">
+      组件间交互
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/interaction.html" class="NavigationItem__router-link">
+      组件间交互概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/view/two-way-bindings.html" class="NavigationItem__router-link">
+      双向绑定
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/slot.html" class="NavigationItem__router-link">
+      slot 模式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/trait-behaviors.html" class="NavigationItem__router-link">
+      trait behaviors
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/relations.html" class="NavigationItem__router-link">
+      组件间关系
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/component-tree-visit.html" class="NavigationItem__router-link">
+      组件树访问
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/placeholder.html" class="NavigationItem__router-link">
+      占位组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/generics.html" class="NavigationItem__router-link">
+      抽象节点
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/data-control.html" class="NavigationItem__router-link">
+      数据控制
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/data-control.html" class="NavigationItem__router-link">
+      数据控制概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/observer.html" class="NavigationItem__router-link">
+      数据监听器
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/data-updates.html" class="NavigationItem__router-link">
+      高级数据更新方法
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/data-update-strategy.html" class="NavigationItem__router-link">
+      数据更新策略
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/data-deep-copy.html" class="NavigationItem__router-link">
+      数据字段拷贝控制
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/component-framework/init-strategy.html" class="NavigationItem__router-link">
+      组件初始化策略
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/pure-data.html" class="NavigationItem__router-link">
+      纯数据字段
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/update-perf-stat.html" class="NavigationItem__router-link">
+      获取更新性能统计信息
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/glass-easel/migration.html" class="NavigationItem__router-link">
+      迁移到 glass-easel
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/extend.html" class="NavigationItem__router-link">
+      自定义组件扩展
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/extend.html" class="NavigationItem__router-link">
+      自定义组件扩展
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/trdparty.html" class="NavigationItem__router-link">
+      开发第三方自定义组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/unit-test.html" class="NavigationItem__router-link">
+      单元测试
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/introduction.html" class="NavigationItem__router-link">
+      Skyline 渲染引擎
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/introduction.html" class="NavigationItem__router-link">
+      概览
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/introduction.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/features.html" class="NavigationItem__router-link">
+      特性
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/comparation.html" class="NavigationItem__router-link">
+      性能对比
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/experience.html" class="NavigationItem__router-link">
+      示例体验
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/component.html" class="NavigationItem__router-link">
+      支持与差异
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/component.html" class="NavigationItem__router-link">
+      基础组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/wxss.html" class="NavigationItem__router-link">
+      WXSS 样式
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/worklet.html" class="NavigationItem__router-link">
+      增强特性
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/worklet.html" class="NavigationItem__router-link">
+      Worklet 动画
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/gesture.html" class="NavigationItem__router-link">
+      手势系统
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/custom-route.html" class="NavigationItem__router-link">
+      自定义路由
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/preset-route.html" class="NavigationItem__router-link">
+      预设路由效果
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/open-container.html" class="NavigationItem__router-link">
+      容器转场动画
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/pop-gesture.html" class="NavigationItem__router-link">
+      页面返回手势
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/share-element.html" class="NavigationItem__router-link">
+      共享元素动画
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/appbar.html" class="NavigationItem__router-link">
+      全局工具栏
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/scroll-container.html" class="NavigationItem__router-link">
+      滚动容器及其应用场景
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/easing-function.html" class="NavigationItem__router-link">
+      动画曲线
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/" class="NavigationItem__router-link">
+      从 WebView 迁移
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/" class="NavigationItem__router-link">
+      起步
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/custom-component/glass-easel/skyline.html" class="NavigationItem__router-link">
+      新版组件框架适配指引
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/best-practice.html" class="NavigationItem__router-link">
+      最佳实践
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/compatibility.html" class="NavigationItem__router-link">
+      常见兼容问题
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/release.html" class="NavigationItem__router-link">
+      发布上线
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/migration/migration-tool.html" class="NavigationItem__router-link">
+      迁移工具
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/debug.html" class="NavigationItem__router-link">
+      性能调试
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/skills.html" class="NavigationItem__router-link">
+      AI
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/skills.html" class="NavigationItem__router-link">
+      Skills
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/changelog.html" class="NavigationItem__router-link">
+      动态
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/changelog.html" class="NavigationItem__router-link">
+      更新日志
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/runtime/skyline/status.html" class="NavigationItem__router-link">
+      特性状态
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/" class="NavigationItem__router-link">
+      插件
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/development.html" class="NavigationItem__router-link">
+      开发插件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/using.html" class="NavigationItem__router-link">
+      使用插件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/api-limit.html" class="NavigationItem__router-link">
+      插件调用 API 的限制
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/component-limit.html" class="NavigationItem__router-link">
+      插件使用组件的限制
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages.html" class="NavigationItem__router-link">
+      插件功能页
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages/user-info.html" class="NavigationItem__router-link">
+      用户信息功能页
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages/request-payment.html" class="NavigationItem__router-link">
+      支付功能页
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages/choose-address.html" class="NavigationItem__router-link">
+      收货地址功能页
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages/choose-invoice.html" class="NavigationItem__router-link">
+      发票功能页
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/plugin/functional-pages/choose-invoice-title.html" class="NavigationItem__router-link">
+      发票抬头功能页
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/network.html" class="NavigationItem__router-link">
+      基础能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/network.html" class="NavigationItem__router-link">
+      网络
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/network.html" class="NavigationItem__router-link">
+      使用说明
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/domain.html" class="NavigationItem__router-link">
+      业务域名
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/mDNS.html" class="NavigationItem__router-link">
+      局域网通信
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/HTTPDNS.html" class="NavigationItem__router-link">
+      移动解析HttpDNS
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/storage.html" class="NavigationItem__router-link">
+      存储
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/file-system.html" class="NavigationItem__router-link">
+      文件系统
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/canvas.html" class="NavigationItem__router-link">
+      画布
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/canvas.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/canvas-legacy-migration.html" class="NavigationItem__router-link">
+      旧版迁移指南
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/subpackages.html" class="NavigationItem__router-link">
+      分包加载
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/subpackages/basic.html" class="NavigationItem__router-link">
+      使用分包
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/subpackages/independent.html" class="NavigationItem__router-link">
+      独立分包
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/subpackages/preload.html" class="NavigationItem__router-link">
+      分包预下载
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/subpackages/async.html" class="NavigationItem__router-link">
+      分包异步化
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/lazyload.html" class="NavigationItem__router-link">
+      按需注入和用时注入
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/workers.html" class="NavigationItem__router-link">
+      多线程 Worker
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/server-ability/backend-api.html" class="NavigationItem__router-link">
+      服务端能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/server-ability/backend-api.html" class="NavigationItem__router-link">
+      服务端 API
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/server-ability/message-push.html" class="NavigationItem__router-link">
+      消息推送
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/custom-tabbar.html" class="NavigationItem__router-link">
+      自定义 tabBar
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/background-fetch.html" class="NavigationItem__router-link">
+      周期性更新
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/pre-fetch.html" class="NavigationItem__router-link">
+      数据预拉取
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/darkmode.html" class="NavigationItem__router-link">
+      DarkMode 适配指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/adapt.html" class="NavigationItem__router-link">
+      大屏适配指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/ability/ohos.html" class="NavigationItem__router-link">
+      HarmonyOS 适配指南
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/inference/tutorial.html" class="NavigationItem__router-link">
+      AI/AR
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/inference/tutorial.html" class="NavigationItem__router-link">
+      AI推理能力 
+    <span class="wedoc-beta-tag" style="margin-left:0;">Beta</span></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/inference/tutorial.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/inference/supports.html" class="NavigationItem__router-link">
+      算子支持列表
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/inference/tutorial_int8.html" class="NavigationItem__router-link">
+      模型量化推理
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/base.html" class="NavigationItem__router-link">
+      VisionKit 视觉能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/base.html" class="NavigationItem__router-link">
+      VisionKit 基础
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/plane.html" class="NavigationItem__router-link">
+      6Dof-水平面 AR
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/plane-options.html" class="NavigationItem__router-link">
+      6Dof-水平面 AR 扩展能力
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/marker.html" class="NavigationItem__router-link">
+      Marker AR
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/osd.html" class="NavigationItem__router-link">
+      单样本检测（OSD）
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/face.html" class="NavigationItem__router-link">
+      人脸检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/body.html" class="NavigationItem__router-link">
+      人体检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/hand.html" class="NavigationItem__router-link">
+      人手检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/shoe.html" class="NavigationItem__router-link">
+      鞋部检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/ocr.html" class="NavigationItem__router-link">
+      OCR检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/idcard.html" class="NavigationItem__router-link">
+      身份证检测
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/visionkit/depth.html" class="NavigationItem__router-link">
+      深度估计
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/" class="NavigationItem__router-link">
+      XR-FRAME
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/" class="NavigationItem__router-link">
+      开发指南
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#开始" class="NavigationItem__router-link">
+      开始
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#新建一个XR组件" class="NavigationItem__router-link">
+      新建一个 XR 组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#在页面中使用这个组件" class="NavigationItem__router-link">
+      在页面中使用这个组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#添加一个物体" class="NavigationItem__router-link">
+      添加一个物体
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#来点颜色和灯光" class="NavigationItem__router-link">
+      来点颜色和灯光
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#有点寡淡加上图像" class="NavigationItem__router-link">
+      有点寡淡，加上图像
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#让场景更丰富环境数据" class="NavigationItem__router-link">
+      让场景更丰富，环境数据
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#动起来加入动画" class="NavigationItem__router-link">
+      动起来，加入动画
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#还是不够放个模型" class="NavigationItem__router-link">
+      还是不够，放个模型
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#再来点交互" class="NavigationItem__router-link">
+      再来点交互
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#组件通信加上HUD" class="NavigationItem__router-link">
+      组件通信，加上 HUD
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#虚拟-x-现实追加AR能力" class="NavigationItem__router-link">
+      虚拟 x 现实，追加 AR 能力
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#识别人脸给自己戴个面具" class="NavigationItem__router-link">
+      识别人脸，给自己戴个面具
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#手势给喜欢的作品点赞" class="NavigationItem__router-link">
+      手势，给喜欢的作品点赞
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#OSDMarker给现实物体做标记" class="NavigationItem__router-link">
+      OSD Marker，给现实物体做标记
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#2DMarker视频让照片动起来" class="NavigationItem__router-link">
+      2D Marker+视频，让照片动起来
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#加上魔法来点粒子" class="NavigationItem__router-link">
+      加上魔法，来点粒子
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#后处理让画面更加好玩" class="NavigationItem__router-link">
+      后处理，让画面更加好玩
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#分享给你的好友吧" class="NavigationItem__router-link">
+      分享给你的好友吧！
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/xr-frame/#之后的就交给你的创意" class="NavigationItem__router-link">
+      之后的，就交给你的创意
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/bluetooth.html" class="NavigationItem__router-link">
+      连接硬件能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/bluetooth.html" class="NavigationItem__router-link">
+      蓝牙
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/bluetooth.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/ble.html" class="NavigationItem__router-link">
+      蓝牙低功耗 (BLE)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/ble-mesh.html" class="NavigationItem__router-link">
+      蓝牙低功耗网状网络 (BLE Mesh)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/beacon.html" class="NavigationItem__router-link">
+      蓝牙信标 (Beacon)
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/nfc.html" class="NavigationItem__router-link">
+      近场通信 (NFC)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/wifi.html" class="NavigationItem__router-link">
+      无线局域网 (Wi-Fi)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-access.html" class="NavigationItem__router-link">
+      硬件设备接入
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-message.html" class="NavigationItem__router-link">
+      设备消息
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-register.html" class="NavigationItem__router-link">
+      设备认证
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-register.html" class="NavigationItem__router-link">
+      指引
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-register-wmpf.html" class="NavigationItem__router-link">
+      使用 WMPF（安卓）认证设备
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-register-sdk.html" class="NavigationItem__router-link">
+      设备认证 SDK（安卓）
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-tee.html" class="NavigationItem__router-link">
+      设备认证 TEE 规范
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/rtos.html" class="NavigationItem__router-link">
+      穿戴设备小程序框架
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-voip.html" class="NavigationItem__router-link">
+      音视频通话+摄像头（for 硬件）
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-voip.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/" class="NavigationItem__router-link">
+      VoIP 通话插件
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/" class="NavigationItem__router-link">
+      接入指引
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-4"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/initByCaller.html" class="NavigationItem__router-link">
+      接口文档
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-5"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/call-intro.html" class="NavigationItem__router-link">
+      发起通话
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/call-intro.html" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/initByCaller.html" class="NavigationItem__router-link">
+      initByCaller
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/callWMPF.html" class="NavigationItem__router-link">
+      callWMPF
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/callDevice.html" class="NavigationItem__router-link">
+      callDevice
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/forceHangUpVoip.html" class="NavigationItem__router-link">
+      forceHangUpVoip
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/getPluginEnterOptions.html" class="NavigationItem__router-link">
+      getPluginEnterOptions
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/getPluginOnloadOptions.html" class="NavigationItem__router-link">
+      getPluginOnloadOptions
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/onVoipEvent.html" class="NavigationItem__router-link">
+      onVoipEvent
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/setCustomBtnText.html" class="NavigationItem__router-link">
+      setCustomBtnText
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/setUIConfig.html" class="NavigationItem__router-link">
+      setUIConfig
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/setVoipEndPagePath.html" class="NavigationItem__router-link">
+      setVoipEndPagePath
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/getIotBindContactList.html" class="NavigationItem__router-link">
+      getIotBindContactList
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/api/errCode.html" class="NavigationItem__router-link">
+      错误码
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/wxpay.html" class="NavigationItem__router-link">
+      支付刷脸模式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/changelog.html" class="NavigationItem__router-link">
+      更新日志
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/index_camera.html" class="NavigationItem__router-link">
+      小程序摄像头插件
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-plugin/index_camera.html" class="NavigationItem__router-link">
+      接入指引
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/device-app-android.html" class="NavigationItem__router-link">
+      开发安卓设备端应用
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/voip-sdk.html" aria-current="page" class="NavigationItem__router-link router-link-exact-active router-link-active">
+      小程序音视频通话 SDK
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/voip-sdk.html" aria-current="page" class="NavigationItem__router-link router-link-exact-active router-link-active">
+      Linux 设备
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-4"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/le-device-sdk.html" class="NavigationItem__router-link">
+      RTOS 设备
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/le-device-sdk.html" class="NavigationItem__router-link">
+      云对云设备端
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/cloud-server-sdk.html" class="NavigationItem__router-link">
+      云对云服务端
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/voip-video.html" class="NavigationItem__router-link">
+      VoIP 视频流指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-sdk/wx_operation.html" class="NavigationItem__router-link">
+      异步接口使用指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip-sdk/hal.html" class="NavigationItem__router-link">
+      硬件抽象层
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/auth.html" class="NavigationItem__router-link">
+      用户授权设备
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/call-wechat.html" class="NavigationItem__router-link">
+      设备呼叫手机微信
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/call-wmpf.html" class="NavigationItem__router-link">
+      手机微信呼叫设备(安卓)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/call-device.html" class="NavigationItem__router-link">
+      手机微信呼叫设备(Linux)
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/performance.html" class="NavigationItem__router-link">
+      性能与体验优化
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/voip-faq.html" class="NavigationItem__router-link">
+      问题排查
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/voip-faq.html" class="NavigationItem__router-link">
+      常见问题 FAQ
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/guide.html" class="NavigationItem__router-link">
+      通话异常排查指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/voip/notification.html" class="NavigationItem__router-link">
+      通话提醒异常排查指南
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/download/Miniprogram_Frame.html" class="NavigationItem__router-link">
+      下载
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/download/Miniprogram_Frame.html" class="NavigationItem__router-link">
+      安卓小程序硬件框架
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/device-group.html" class="NavigationItem__router-link">
+      设备组
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/device/help.html" class="NavigationItem__router-link">
+      需要帮助
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/login.html" class="NavigationItem__router-link">
+      开放能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/login.html" class="NavigationItem__router-link">
+      用户信息
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/login.html" class="NavigationItem__router-link">
+      小程序登录
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/union-id.html" class="NavigationItem__router-link">
+      UnionID 机制说明
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/authorize.html" class="NavigationItem__router-link">
+      授权
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/signature.html" class="NavigationItem__router-link">
+      开放数据校验与解密
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/getPhoneNumber.html" class="NavigationItem__router-link">
+      手机号快速验证组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/getRealtimePhoneNumber.html" class="NavigationItem__router-link">
+      手机号实时验证组件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/userProfile.html" class="NavigationItem__router-link">
+      获取头像昵称
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/bio-auth.html" class="NavigationItem__router-link">
+      生物认证
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/account-card.html" class="NavigationItem__router-link">
+      账户卡片
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share-timeline.html" class="NavigationItem__router-link">
+      分享到朋友圈
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share.html" class="NavigationItem__router-link">
+      转发
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share.html" class="NavigationItem__router-link">
+      转发
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share/updatable-message.html" class="NavigationItem__router-link">
+      动态消息
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share/private-message.html" class="NavigationItem__router-link">
+      小程序私密消息
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/favorite.html" class="NavigationItem__router-link">
+      收藏
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/material/support_material.html" class="NavigationItem__router-link">
+      聊天素材打开
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/chatToolOpenMode.html" class="NavigationItem__router-link">
+      聊天工具开放模式
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/chatTool.html" class="NavigationItem__router-link">
+      聊天工具
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/laboruse/intro.html" class="NavigationItem__router-link">
+      用工关系
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/safe-password.html" class="NavigationItem__router-link">
+      安全能力
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/safe-password.html" class="NavigationItem__router-link">
+      安全键盘
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/user-encryptkey.html" class="NavigationItem__router-link">
+      小程序加密网络通道
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/share-werun.html" class="NavigationItem__router-link">
+      分享数据到微信运动
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/voip-chat.html" class="NavigationItem__router-link">
+      音视频通话
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/voip-chat.html" class="NavigationItem__router-link">
+      多人音视频对话
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/1v1voip.html" class="NavigationItem__router-link">
+      双人音视频对话
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/launchApp.html" class="NavigationItem__router-link">
+      打开 App
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/openEmbeddedMiniProgram.html" class="NavigationItem__router-link">
+      打开半屏小程序
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message.html" class="NavigationItem__router-link">
+      消息
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message-overview.html" class="NavigationItem__router-link">
+      订阅消息
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message-2.html" class="NavigationItem__router-link">
+      新版一次性订阅消息开发指南
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-4"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message.html" class="NavigationItem__router-link">
+      小程序订阅消息（用户通过弹窗订阅）开发指南
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message.html#订阅消息语音提醒" class="NavigationItem__router-link">
+      订阅消息语音提醒
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/subscribe-message.html#订阅消息添加提醒" class="NavigationItem__router-link">
+      订阅消息添加提醒
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/customer-message.html" class="NavigationItem__router-link">
+      客服消息
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/customer-message.html" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/receive.html" class="NavigationItem__router-link">
+      接收消息和事件
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/send.html" class="NavigationItem__router-link">
+      发送消息
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/trans.html" class="NavigationItem__router-link">
+      转发消息
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/typing.html" class="NavigationItem__router-link">
+      下发客服输入状态
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/customer-message/temp-media.html" class="NavigationItem__router-link">
+      临时素材
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/location-message.html" class="NavigationItem__router-link">
+      位置消息
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/qr-code.html" class="NavigationItem__router-link">
+      获取小程序码
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/url-scheme.html" class="NavigationItem__router-link">
+      获取小程序链接
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/url-scheme.html" class="NavigationItem__router-link">
+      获取 URL Scheme
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/url-link.html" class="NavigationItem__router-link">
+      获取 URL Link
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/shortlink.html" class="NavigationItem__router-link">
+      获取 Short Link
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/sms.html" class="NavigationItem__router-link">
+      应用：短信打开小程序
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/NFC.html" class="NavigationItem__router-link">
+      应用：NFC 标签打开小程序
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/migrateMiniprogram.html" class="NavigationItem__router-link">
+      小程序账号迁移
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/channels-profile.html" class="NavigationItem__router-link">
+      视频号
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/channels-profile.html" class="NavigationItem__router-link">
+      视频号主页
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/channels-activity.html" class="NavigationItem__router-link">
+      视频号视频
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/channels-live.html" class="NavigationItem__router-link">
+      视频号直播
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/channels-event.html" class="NavigationItem__router-link">
+      视频号活动
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/data-analysis.html" class="NavigationItem__router-link">
+      数据分析
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/banner-ad.html" class="NavigationItem__router-link">
+      广告
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/banner-ad.html" class="NavigationItem__router-link">
+      Banner 广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/rewarded-video-ad.html" class="NavigationItem__router-link">
+      激励视频广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/interstitialAd-ad.html" class="NavigationItem__router-link">
+      插屏广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/video-feeds-ad.html" class="NavigationItem__router-link">
+      视频广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/video-patch-ad.html" class="NavigationItem__router-link">
+      视频前贴广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/grid-ad.html" class="NavigationItem__router-link">
+      格子广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/custom-ad.html" class="NavigationItem__router-link">
+      原生模板广告
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/preload-ad.html" class="NavigationItem__router-link">
+      广告预加载接口
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/ad-data-interface.html" class="NavigationItem__router-link">
+      广告数据接口
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/ad-data-interface.html#广告汇总数据" class="NavigationItem__router-link">
+      广告汇总数据
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/ad-data-interface.html#广告细分数据" class="NavigationItem__router-link">
+      广告细分数据
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/ad-data-interface.html#广告位清单" class="NavigationItem__router-link">
+      广告位清单
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/open-ability/ad/ad-data-interface.html#结算收入数据" class="NavigationItem__router-link">
+      结算收入数据
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/usability/debug.html" class="NavigationItem__router-link">
+      调试
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/usability/debug.html" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/usability/vConsole.html" class="NavigationItem__router-link">
+      vConsole
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/usability/sourceMap.html" class="NavigationItem__router-link">
+      Source Map
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/realtimelog/" class="NavigationItem__router-link">
+      实时日志
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/usability/PublicErrno.html" class="NavigationItem__router-link">
+      Errno错误码
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/" class="NavigationItem__router-link">
+      性能与体验
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start.html" class="NavigationItem__router-link">
+      启动性能
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start.html" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start_process.html" class="NavigationItem__router-link">
+      小程序启动流程
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start_optimizeA.html" class="NavigationItem__router-link">
+      代码包体积优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start_optimizeB.html" class="NavigationItem__router-link">
+      代码注入优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start_optimizeC.html" class="NavigationItem__router-link">
+      首屏渲染优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/start_optimizeD.html" class="NavigationItem__router-link">
+      其他优化建议
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips.html" class="NavigationItem__router-link">
+      运行时性能
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips.html" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/runtime_setData.html" class="NavigationItem__router-link">
+      合理使用数据更新方法
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/runtime_render.html" class="NavigationItem__router-link">
+      渲染性能优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/runtime_nav.html" class="NavigationItem__router-link">
+      页面切换优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/runtime_resource.html" class="NavigationItem__router-link">
+      资源加载优化
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/tips/runtime_memory.html" class="NavigationItem__router-link">
+      内存优化
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_data.html" class="NavigationItem__router-link">
+      性能数据
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_diagnostic_tool.html" class="NavigationItem__router-link">
+      性能诊断工具
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_diagnostic_tool.html" class="NavigationItem__router-link">
+      工具介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_diagnostic_rules.html" class="NavigationItem__router-link">
+      工具评测标准
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/analysis.html" class="NavigationItem__router-link">
+      体验分析
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_debug.html" class="NavigationItem__router-link">
+      调试工具
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/perf_debug.html" class="NavigationItem__router-link">
+      概述
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/remote_debug_2.html" class="NavigationItem__router-link">
+      真机调试 2.0
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/devtools-perf.html" class="NavigationItem__router-link">
+      「模拟器」和「调试器」
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/quality-panel.html" class="NavigationItem__router-link">
+      代码质量分析面板
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/fps_panel.html" class="NavigationItem__router-link">
+      FPS 面板
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/panel.html" class="NavigationItem__router-link">
+      性能面板
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/audits.html" class="NavigationItem__router-link">
+      体验评分
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/audits.html" class="NavigationItem__router-link">
+      体验评分简介
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-3"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/scoring.html" class="NavigationItem__router-link">
+      评分方法与规则
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/scoring.html" class="NavigationItem__router-link">
+      评分方法
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/performance.html" class="NavigationItem__router-link">
+      性能
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/accessibility.html" class="NavigationItem__router-link">
+      体验
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/audits/best-practice.html" class="NavigationItem__router-link">
+      最佳实践
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/wasm.html" class="NavigationItem__router-link">
+      WXWebAssembly
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/api-frequency.html" class="NavigationItem__router-link">
+      接口调用频率规范
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/network.html" class="NavigationItem__router-link">
+      网络调优
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/performance/weak-network.html" class="NavigationItem__router-link">
+      弱网体验优化
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html" class="NavigationItem__router-link">
+      安全指引
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#开发原则与注意事项" class="NavigationItem__router-link">
+      开发原则与注意事项
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#通用" class="NavigationItem__router-link">
+      通用
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#接口鉴权" class="NavigationItem__router-link">
+      接口鉴权
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#代码管理与泄漏" class="NavigationItem__router-link">
+      代码管理与泄漏
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#小程序" class="NavigationItem__router-link">
+      小程序
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#信息泄露" class="NavigationItem__router-link">
+      信息泄露
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#授权用户信息变更" class="NavigationItem__router-link">
+      授权用户信息变更
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#小程序违规处罚信息通知" class="NavigationItem__router-link">
+      小程序违规处罚信息通知
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#后台" class="NavigationItem__router-link">
+      后台（包括云函数与自建后台）
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#注入漏洞" class="NavigationItem__router-link">
+      注入漏洞
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#SQL-注入" class="NavigationItem__router-link">
+      SQL 注入
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#命令注入" class="NavigationItem__router-link">
+      命令注入
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#弱口令" class="NavigationItem__router-link">
+      弱口令
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#文件上传漏洞" class="NavigationItem__router-link">
+      文件上传漏洞
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#文件下载" class="NavigationItem__router-link">
+      文件下载
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#目录遍历" class="NavigationItem__router-link">
+      目录遍历
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/security.html#条件竞争" class="NavigationItem__router-link">
+      条件竞争
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/operation.html" class="NavigationItem__router-link">
+      健康运营指引
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/operation.html#用户安全解决方案" class="NavigationItem__router-link">
+      用户安全解决方案
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/operation.html#内容安全解决方案" class="NavigationItem__router-link">
+      内容安全解决方案
+    <!----></a> <!----> <!----></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-2"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/user-privacy/" class="NavigationItem__router-link">
+      用户隐私保护
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/user-privacy/" class="NavigationItem__router-link">
+      用户隐私保护指引填写说明
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/user-privacy/miniprogram-intro.html" class="NavigationItem__router-link">
+      小程序用户隐私保护指引内容介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/user-privacy/plugin-intro.html" class="NavigationItem__router-link">
+      插件用户隐私保护说明内容介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/user-privacy/PrivacyAuthorize.html" class="NavigationItem__router-link">
+      小程序隐私协议开发指南
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/gateway.html" class="NavigationItem__router-link">
+      业务安全解决方案
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/Internationalization-Friendly.html" class="NavigationItem__router-link">
+      国际化友好适配指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <!----> <!----> <a href="https://developer.work.weixin.qq.com/document/path/92455" target="_blank" class="NavigationItem__external-link">企业微信兼容</a></span></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/client-lib/" class="NavigationItem__router-link">
+      基础库
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/client-lib/" class="NavigationItem__router-link">
+      介绍
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/client-lib/version.html" class="NavigationItem__router-link">
+      版本分布
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/compatibility.html" class="NavigationItem__router-link">
+      低版本兼容
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/search/seo.html" class="NavigationItem__router-link">
+      小程序搜索
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/search/seo.html" class="NavigationItem__router-link">
+      小程序搜索优化指南
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/product/" class="NavigationItem__router-link">
+      商品数据接入（内测）
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/pc/" class="NavigationItem__router-link">
+      PC 小程序
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/pc/" class="NavigationItem__router-link">
+      PC 小程序接入指南
+    <!----></a> <!----> <!----></span></li></ul></div></li><li><div class="NavigationLevel NavigationLevel--closed NavigationLevel--level-1"><div class="NavigationLevel__parent"><span class="NavigationToggle NavigationToggle--closed"><span class="NavigationToggle__icon NavigationToggle__icon--closed"></span></span> <span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/release/" class="NavigationItem__router-link">
+      更新日志
+    <!----></a> <!----> <!----></span></div> <ul class="NavigationLevel__children"><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/release/" class="NavigationItem__router-link">
+      v3.x版本
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/release/v2.html" class="NavigationItem__router-link">
+      v2.x版本
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/release/v1.html" class="NavigationItem__router-link">
+      v1.x版本
+    <!----></a> <!----> <!----></span></li><li><span class="NavigationItem"><!----> <a href="/miniprogram/dev/framework/release/v0.html" class="NavigationItem__router-link">
+      v0.x版本
+    <!----></a> <!----> <!----></span></li></ul></div></li></ul></div></div> </aside></div> <div class="page__wrp"><main class="page"><div class="page-inner" style="min-height:0px;"> <div id="docContent"><div class="Breadcrumb"></div> <div class="content custom"><h1 id="小程序音视频通话-SDK-Linux-设备"><a href="#小程序音视频通话-SDK-Linux-设备" class="header-anchor">#</a> 小程序音视频通话 SDK (Linux 设备)</h1> <p>此 SDK 运行于搭载 Linux 系统的硬件设备上，为设备提供向手机微信内的小程序拨打 VoIP 通话的能力。</p> <p>使用此 SDK 之前，请先参考<a href="../device-voip" target="_blank">《小程序音视频通话（for 硬件）》</a>完成前置的接入和小程序开发流程。</p> <h2 id="_1-设备要求"><a href="#_1-设备要求" class="header-anchor">#</a> 1. 设备要求</h2> <h3 id="_1-1-硬件要求"><a href="#_1-1-硬件要求" class="header-anchor">#</a> 1.1 硬件要求</h3> <ul><li>CPU：未定最低要求，推荐双核 500MHz CPU 或更高规格。</li> <li>内存：推荐 64M+ RAM。SDK 本身至少需要 13M 内存。</li> <li>磁盘
+<ul><li>空间：32M+ ROM (SDK 代码文件本身有 6.5M, 此外还需要预留文件读写空间)。</li> <li>规格：推荐 EMMC/UFS；若设备包含 RPMB，则必须确保 RPMB 分区未被使用。</li></ul></li> <li>麦克风
+<ul><li>采样率：需要支持 16000，不支持的需要厂商自行重采样。</li> <li>编码格式：必须支持 PCM；可选支持 OPUS/G711/G729（软编软解）。</li></ul></li> <li>扬声器:
+<ul><li>采样率：需要支持 16000，不支持的需要厂商自行重采样。</li> <li>编码格式：必须支持 PCM；可选支持 OPUS/G711/G729（软编软解）。</li></ul></li> <li>摄像头（可选）
+<ul><li>分辨率：至少 240x320。</li> <li>编码格式
+<ul><li>H264：必须支持, 如果设备确不支持 H264, 你可以选择语音通话。</li> <li>H265：可选支持, 仅微信 8.0.36 及以上版本支持。</li> <li>暂不考虑支持其它视频编码格式。</li></ul></li></ul></li></ul> <h3 id="_1-2-系统要求"><a href="#_1-2-系统要求" class="header-anchor">#</a> 1.2 系统要求</h3> <ul><li>C++ 标准库: 需要附带 libstdc++.so.6, 版本最低支持 C++14。</li> <li>时间: 需要同步当前时间，不能用假时间
+<ul><li>由于 SDK 需要建立 SSL 链接，需要本机有正常的世界时间以便 TLS 校验证书有效性。</li> <li>SDK 还需要时间来判断本地缓存是否过期. 如果系统没有正确时间 (如 1970-01-01), 则 SDK 会认为本地缓存一致不过期, 导致缓存超时后也未刷新缓存。</li></ul></li> <li>工具链
+<ul><li>arm64: gcc-linaro 7.3.1 及以上版本 (glibc 2.17, glibcxx 3.4.22).</li> <li>arm: gcc-linaro 5.4.1 及以上版本 (glibc 2.16, glibcxx 3.4.21).</li></ul></li> <li>内核：未定最低要求</li></ul> <h3 id="_1-3-第三方库要求"><a href="#_1-3-第三方库要求" class="header-anchor">#</a> 1.3 第三方库要求</h3> <p>SDK 需要以下第三方库，设备厂商可以考虑在系统内部署，与其他应用共享，以节省程序体积：</p> <ol><li>libcurl: 7.84.0+</li> <li>TLS 库: 具体请参考 <code>wx_crypto_module</code> 章节。
+我们强烈建议设备/芯片厂商自行定制 OpenSSL 或 MbedTLS，以便能在 SHA256、RSA、HMAC 等算法能使用芯片的硬件加速指令完成计算，加快 https 证书校验的速度，同时节能。</li></ol> <p><strong>libcurl</strong></p> <p>如果系统内已经包含了 libcurl, 你可以在 SDK 内的 libcurl.so 和系统内自带的 libcurl.so 二选一，不需要携带多个 libcurl。</p> <ul><li>若使用 SDK 内的 libcurl，请确保替换掉系统内的 libcurl，不要同时存在两个版本，可能会有兼容问题。</li> <li>SDK 内自带的 libcurl 链接了 mbedtls。如果系统内已经有了 OpenSSL 或其他 SSL 库，且你不希望在系统内额外带一份 mbedtls，你可以自行构建一个 7.84.0 或以上版本的 libcurl 并置于系统中。这样就不需要 SDK 自带的 libcurl 和 mbedtls 了。</li> <li>系统里自带的 libcurl 必须支持 https+TLS 证书客户端校验，版本号需要为 7.84.0 或以上版本。</li></ul> <h2 id="_2-下载-SDK"><a href="#_2-下载-SDK" class="header-anchor">#</a> 2. 下载 SDK</h2> <p>请在 <a href="https://git.weixin.qq.com/wxa_iot/voipsdk/tree/master/linux" target="_blank">此处</a> 下载 SDK。</p> <p>SDK 解压之后，你将看到如下目录：</p> <ul><li><code>include</code>: 头文件</li> <li><code>lib</code>: 动态库文件</li> <li><code>example</code>: 独立可运行的 Demo 案例</li></ul> <p><strong>以下介绍的接口，都可以在 <code>include</code> 目录中找到，<code>example</code> 中也有对应的示例，请结合头文件和示例代码阅读此文档</strong>。</p> <h3 id="关于铃声"><a href="#关于铃声" class="header-anchor">#</a> 关于铃声</h3> <p>SDK 会在调用 <code>wx_voip_session_call</code> 函数时创建一个音频流用于输出铃声。厂商设备接入方必须要接入<a href="https://git.weixin.qq.com/wxa_iot/voipsdk/blob/master/linux/phonering.wav" target="_blank">微信的拨打铃声</a>，否则将无法通过 VoIP 接入审核。</p> <p>铃声目前提供的是 PCM-S16 (采样率 8000) 格式的音频。如果设备不支持该采样率，请自行重采样。</p> <h2 id="_3-实现硬件抽象层"><a href="#_3-实现硬件抽象层" class="header-anchor">#</a> 3. 实现硬件抽象层</h2> <p>SDK 正常工作依赖硬件设备平台提供的软硬件接口，请参考<a href="../voip-sdk/hal" target="_blank">硬件抽象层</a>文档实现相关接口。</p> <h2 id="_4-初始化-SDK"><a href="#_4-初始化-SDK" class="header-anchor">#</a> 4. 初始化 SDK</h2> <blockquote><p>头文件：<code>wmpf/wmpf.h</code>。</p></blockquote> <p>每次进程启动后，调用任意 SDK 的接口之前，需要首先调用如下方法对 SDK 进行初始化。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_operation_t</span> <span class="token function">wx_init</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token class-name">wx_init_config_t</span><span class="token operator">*</span> config<span class="token punctuation">,</span>
+                             <span class="token class-name">wx_get_module_t</span> get_module<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><blockquote><p>由于测试时往往使用开发版或者体验版小程序，请注意在调试的时候设置 wxa_flavor 至合适的值。</p></blockquote> <p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>config</td> <td>wx_init_config_t*</td> <td>初始化参数，后面详细说明</td></tr> <tr><td>get_module</td> <td>wx_get_module_t</td> <td><a href="../voip-sdk/hal" target="_blank">硬件抽象层</a>配置的函数指针</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_init()是异步函数，会发起网络请求。请留意异步操作完成之后的状态码。</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_INVALID_ARGUMENT</td> <td>config 中的参数有错误。</td></tr> <tr><td>WXERROR_TIMEOUT</td> <td>请求超时。</td></tr> <tr><td>WXERROR_RESOURCE_EXHAUSTED</td> <td>请检查网络状态或磁盘读写权限。</td></tr> <tr><td>WXERROR_FAILED_PRECONDITION</td> <td>config 传入的 device_id 和 device_signature 没有在 WeCooper 平台注册；或重复调用 wx_init()。</td></tr> <tr><td>WXERROR_INTERNAL</td> <td>其他内部错误。</td></tr></tbody></table></div><h3 id="_4-1-wx-init-config-t"><a href="#_4-1-wx-init-config-t" class="header-anchor">#</a> 4.1 <code>wx_init_config_t</code></h3> <p>提供初始化 SDK 所需的一系列参数。</p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>common</td> <td>wx_struct_t</td> <td>wx_init_config_t 类型的基类</td></tr> <tr><td>log_dir</td> <td>char *</td> <td>SDK 写日志的路径。如果设置为<code>NULL</code>则不会写入日志</td></tr> <tr><td>data_dir</td> <td>char *</td> <td>SDK 读写数据的路径。需确保进程有该目录的读写权限，需确保此目录内容不被其他代码/进程修改。</td></tr> <tr><td>product_id</td> <td>int</td> <td>固定填 <code>0</code></td></tr> <tr><td>host_appid</td> <td>char *</td> <td>固定填 <code>NULL</code></td></tr> <tr><td>device_id</td> <td>char *</td> <td>厂商自行分配的设备 ID。需确保每台设备使用唯一的 ID，并且同一设备始终使用同一 ID。</td></tr> <tr><td>device_signature</td> <td>char *</td> <td>固定填 <code>NULL</code></td></tr> <tr><td>device_signature_version</td> <td>int</td> <td>固定填 <code>0</code></td></tr> <tr><td>model_id</td> <td>char *</td> <td>通过<a href="../device-access" target="_blank">硬件设备接入</a>获得的设备型号 ID</td></tr> <tr><td>wxa_appid</td> <td>char *</td> <td>接收通话的小程序的 AppID</td></tr> <tr><td>wxa_flavor</td> <td>wx_wxa_flavor_t</td> <td>接收通话的小程序的版本，如开发版、体验版、正式版。</td></tr> <tr><td>rpmb_device</td> <td>char *</td> <td>RPMB 设备路径。采用 EMMC 的硬件设备需要指定此路径。</td></tr> <tr><td>h265_only</td> <td>bool</td> <td>如果设备只支持 H265，可以设置此字段为 true，否则设备接收到的流以 H264 优先</td></tr> <tr><td>video_landscape</td> <td>bool</td> <td>true: SDK 收到流的宽高比 4:3, false: SDK 收到流的宽高比 3:4</td></tr> <tr><td>subscribe_video_length</td> <td>int</td> <td>开发者可以用此配置来订阅一个分辨率的长边值，目前支持 320，需要向微信提交 appid，待开通订阅机制后生效</td></tr></tbody></table></div><h2 id="_5-注册设备"><a href="#_5-注册设备" class="header-anchor">#</a> 5. 注册设备</h2> <blockquote><p>头文件：<code>wmpf/wmpf.h</code>。</p></blockquote> <p>SDK 初始化成功之后，应当首先检查设备是否已经注册过。如果没有注册过，则需对设备进行注册，然后才能发起通话。</p> <h3 id="_5-1-检查当前设备是否已注册"><a href="#_5-1-检查当前设备是否已注册" class="header-anchor">#</a> 5.1 检查当前设备是否已注册</h3> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_error_t</span> <span class="token function">wx_device_is_registered</span><span class="token punctuation">(</span>bool<span class="token operator">*</span> is_registered_out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>is_registered_out</td> <td>bool*</td> <td>传入指针，用于接收是否注册的状态，如果检查到尚未注册，需要参考流程 5.2 进行设备注册</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><code>wx_error_t</code> 错误码</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_OK</td> <td>成功</td></tr> <tr><td>WXERROR_FAILED_PRECONDITION</td> <td>wx_init()函数尚未调用。需要先调用 wx_init()。</td></tr></tbody></table></div><h3 id="_5-2-设备注册"><a href="#_5-2-设备注册" class="header-anchor">#</a> 5.2 设备注册</h3> <p>向微信小程序后台注册设备。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_operation_t</span> <span class="token function">wx_device_register</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> sn_ticket<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>注意事项：</p> <ol><li>设备注册后，SDK 将会保存设备的注册信息，包括小程序 AppID、Model ID、设备 ID（SN），以及其他需要保存的设备注册信息。因此设备只能给指定的小程序拨打小程序音视频通话，不能变更小程序，不能给多个小程序拨打小程序音视频通话。</li> <li>snTicket 只有 5 分钟有效期，设备不可以存储 snTicket。</li> <li>snTicket 需要由厂商后台传给设备，而不是设备直接访问微信后台获取 snTicket。因为 snTicket 获取需要 accessToken，该参数需要由厂商后台维护。</li> <li>虽然 snTicket 只有 5 分钟有效期，但 snTicket 仅为设备注册时校验使用. 因此注册信息本身是持久化的，后续也不再需要 snTicket 注册设备或者拨打音视频通话。</li></ol> <p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>sn_ticket</td> <td>char*</td> <td>通过<a href="https://developers.weixin.qq.com/miniprogram/dev/server/API/hardware-device/api_getsnticket" target="_blank">获取设备票据</a>接口获得</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_device_register()是异步函数，会发起网络请求。请留意异步操作完成之后的状态码。</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_OK</td> <td>成功</td></tr> <tr><td>WXERROR_INVALID_ARGUMENT</td> <td>sn_ticket 不合法或已失效。</td></tr> <tr><td>WXERROR_ALREADY_EXISTS</td> <td>设备已经注册过，无需二次注册。</td></tr> <tr><td>WXERROR_PERMISSION_DENIED</td> <td>该设备 ID 已经注册过。</td></tr> <tr><td>WXERROR_UNAVAILABLE</td> <td>网络访问失败。</td></tr> <tr><td>WXERROR_DATA_LOSS</td> <td>写入注册信息失败。需要检查文件读写权限。如果是 EMMC，需检查 RPMB 是否已经写过内容。</td></tr> <tr><td>WXERROR_FAILED_PRECONDITION</td> <td>wx_init()函数尚未调用。需要先调用 wx_init()。</td></tr></tbody></table></div><h2 id="_6-配置-Session"><a href="#_6-配置-Session" class="header-anchor">#</a> 6. 配置 Session</h2> <blockquote><p>头文件：<code>wmpf/voip.h</code>。</p></blockquote> <p>发起通话之前，需要首先创建一个 Session。Session 中将配置通话发起方（也就是接入此 SDK 的设备）的信息，设置通话状态回调等。</p> <h3 id="_6-1-初始化-Session-对象"><a href="#_6-1-初始化-Session-对象" class="header-anchor">#</a> 6.1 初始化 Session 对象</h3> <p>调用 <code>wx_voip_session_new()</code> 以配置 <code>wx_voip_session_t</code> 对象。此对象用于进一步发起通话或加入通话。Session 对象可以重复使用，反复发起或加入通话。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_error_t</span>
+<span class="token function">wx_voip_session_new</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_type_t</span><span class="token punctuation">,</span>
+                    <span class="token class-name">wx_voip_session_scene_t</span><span class="token punctuation">,</span>
+                    <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">wx_voip_session_listener</span><span class="token operator">*</span> listener<span class="token punctuation">,</span>
+                    <span class="token keyword">void</span><span class="token operator">*</span> user_data<span class="token punctuation">,</span>
+                    <span class="token keyword">const</span> <span class="token class-name">wx_voip_member_t</span><span class="token operator">*</span> self_member<span class="token punctuation">,</span>
+                    <span class="token keyword">const</span> <span class="token class-name">wx_voip_session_config_t</span><span class="token operator">*</span> config<span class="token punctuation">,</span>
+                    <span class="token class-name">wx_voip_session_t</span><span class="token operator">*</span> session<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session_type</td> <td>wx_voip_session_type_t</td> <td>选择是纯音频通话还是音视频通话</td></tr> <tr><td>scene</td> <td>wx_voip_session_scene_t</td> <td>固定填 <code>WX_VOIP_SESSION_SCENE_IOT</code></td></tr> <tr><td>listener</td> <td>wx_voip_session_listener *</td> <td>设置监听通话状态回调</td></tr> <tr><td>user_data</td> <td>void *</td> <td>开发者按需设置 context 信息。相关内容可以在状态回调中获取到。</td></tr> <tr><td>self_member</td> <td>wx_voip_member_t *</td> <td>通话发起方（也就是接入此 SDK 的设备）的信息，详见后续「self_member 参数说明」</td></tr> <tr><td>config</td> <td>wx_voip_session_config_t *</td> <td>摄像头配置（分辨率、旋转等）。纯音频通话填入默认值{0,0,0}即可。</td></tr> <tr><td>session</td> <td>wx_voip_session_t *</td> <td>本次配置的 session 对象。<strong>注意</strong>：后续需记得调用 wx_voip_session_destroy()销毁此对象。</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><code>wx_error_t</code> 错误码</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_OK</td> <td>成功</td></tr> <tr><td>WXERROR_INVALID_ARGUMENT</td> <td>参数错误。</td></tr> <tr><td>WXERROR_FAILED_PRECONDITION</td> <td>wx_init()函数尚未调用。需要先调用 wx_init()。</td></tr></tbody></table></div><p><strong>self_member 参数说明</strong></p> <p>设备端（通话发起方）的 <code>wx_voip_member_t</code> 设置如下：</p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>name</td> <td>char *</td> <td>固定填空字符串</td></tr> <tr><td>id</td> <td>char *</td> <td>必须传入调用 wx_init()时 config 中的 device_id</td></tr> <tr><td>camera_status</td> <td>wx_voip_member_camera_status_t</td> <td>音视频通话，此参数描述通话建立时己方摄像头是否开启。纯音频通话忽略。</td></tr></tbody></table></div><h3 id="_6-2-销毁-Session-对象"><a href="#_6-2-销毁-Session-对象" class="header-anchor">#</a> 6.2 销毁 Session 对象</h3> <p>当不需要发起通话之后，需要销毁之前创建的 Session 对象，防止内存泄漏。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token keyword">void</span> <span class="token function">wx_voip_session_destroy</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_t</span> session<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session</td> <td>wx_voip_session_t *</td> <td>要销毁的 session 对象。</td></tr></tbody></table></div><h2 id="_7-通话"><a href="#_7-通话" class="header-anchor">#</a> 7. 通话</h2> <blockquote><p>头文件：<code>wmpf/voip.h</code>。</p></blockquote> <p>成功创建了 <code>wx_voip_session_type_t</code> 对象，就可以进一步发起通话了。调用 <code>wx_voip_session_call()</code> 发起通话，调用 <code>wx_voip_session_hangup()</code> 主动结束通话。通话也可能被对方挂断，或者被异常挂断，相关事件通过创建 session 时设置的回调去监听。</p> <h3 id="_7-1-发起通话"><a href="#_7-1-发起通话" class="header-anchor">#</a> 7.1 发起通话</h3> <p>调用异步函数 <code>wx_voip_session_call()</code> 发起通话：</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_operation_t</span>
+<span class="token function">wx_voip_session_call</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_t</span> session<span class="token punctuation">,</span>
+                     <span class="token keyword">const</span> <span class="token class-name">wx_voip_member_t</span><span class="token operator">*</span> callee<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>注意事项：</p> <ol><li>调用本函数发起音视频通话前，你需要通过 <code>wx_device_is_registered</code> 函数来判断设备是否已经注册（一次性判断即可，不需要多次判断）。仅在设备已经注册成功的前提下，设备才能调用本函数拨打小程序音视频通话。</li> <li>要拨打的微信用户的 OpenID 来自的小程序，必须和当前设备注册时使用的小程序 AppID 一致。</li> <li>由于被拨打小程序音视频通话的微信用户需要预先在小程序内对该设备进行授权，设备在该函数返回 <code>WXERROR_PERMISSION_DENIED</code> 后，应当提示要拨号的用户没有权限拨打小程序音视频通话.</li> <li>设备侧可以通过 <code>wx_voip_session_can_call</code> 函数判断是否可以向指定用户拨打音视频通话（仅包含 SDK 接口，没有后台接口）.</li> <li>小程序侧可以通过 <code>wmpfVoip.getIotContactList</code> 函数判断音视频通话授权.</li> <li>我们推荐厂商在后台维护 OpenID 与设备 ID 的授权对应关系.</li> <li>厂商在调试时，应当使用体验版或者开发版小程序，因为这些版本默认包含音视频通话体验时长. 且正式版小程序需要在设备寄送审核通过后才可以上线音视频通话能力.</li></ol> <p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session</td> <td>wx_voip_session_t</td> <td>前面创建的 session 对象</td></tr> <tr><td>callee</td> <td>const wx_voip_member_t*</td> <td>通话接听端（小程序端）信息。详见后续「callee 参数说明」</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_voip_session_call()是异步函数，会发起网络请求。此异步函数返回成功，表示通话正确拨出，不代表通话已接通。请留意异步操作完成之后的状态码。</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_OK</td> <td>成功</td></tr> <tr><td>WXERROR_FAILED_PRECONDITION</td> <td>当前正在通话中，不要重复拨打电话。</td></tr> <tr><td>WXERROR_RESOURCE_EXHAUSTED</td> <td>请检查网络状态。</td></tr> <tr><td>WXERROR_PERMISSION_DENIED</td> <td>被拨打的用户未向当前设备授权拨打 VoIP 通话权限；或当前小程序开通拨打 VoIP 通话的权限。</td></tr> <tr><td>WXERROR_INVALID_ARGUMENT</td> <td>open_id 或 sn_ticket 设置错误</td></tr> <tr><td>WXERROR_UNAVAILABLE</td> <td>当前微信小程序没有开通 VoIP 通话权限，或通话时长不足，或者当前设备没有购买 LICENSE。</td></tr> <tr><td>WXERROR_INTERNAL</td> <td>内部错误</td></tr></tbody></table></div><p><strong>callee 参数说明</strong></p> <p>小程序端（通话接听方）的 <code>wx_voip_member_t</code> 设置如下：</p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>name</td> <td>char *</td> <td>显示在设备端 UI 上的名称。</td></tr> <tr><td>id</td> <td>char *</td> <td>传入通话接收方微信用户在小程序里的 open_id。</td></tr> <tr><td>camera_status</td> <td>wx_voip_member_camera_status_t</td> <td>音视频通话，此参数描述通话建立时手机微信小程序端摄像头是否开启。纯音频通话请忽略此参数。</td></tr></tbody></table></div><h3 id="_7-2-主动结束通话"><a href="#_7-2-主动结束通话" class="header-anchor">#</a> 7.2 主动结束通话</h3> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_operation_t</span>
+<span class="token function">wx_voip_session_hangup</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_t</span> session<span class="token punctuation">,</span>
+                       <span class="token class-name">wx_voip_hangup_reason_t</span> reason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session</td> <td>wx_voip_session_t</td> <td><code>wx_voip_session_new</code> 创建的 session 对象</td></tr> <tr><td>reason</td> <td>wx_voip_hangup_reason_t</td> <td>挂断 VoIP 通话的原因</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_voip_session_hangup()是异步函数，会发起网络请求。此异步函数返回成功，表示通话成功挂断。请留意异步操作完成之后的状态码。</p> <h3 id="_7-3-手机微信呼叫设备-接听通话"><a href="#_7-3-手机微信呼叫设备-接听通话" class="header-anchor">#</a> 7.3 手机微信呼叫设备 - 接听通话</h3> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_operation_t</span> <span class="token function">wx_voip_listener_join</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_t</span> session<span class="token punctuation">,</span>
+                                           <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>roomid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session</td> <td>wx_voip_session_t</td> <td><code>wx_voip_session_new</code> 创建的 session 对象</td></tr> <tr><td>roomid</td> <td>const char *</td> <td>小程序插件端发起通话后返回的 roomId</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_voip_listener_join()是异步函数，会发起网络请求。此异步函数返回成功，表示通话正常加入。请留意异步操作完成之后的状态码。</p> <h3 id="_7-4-手机微信呼叫设备-提前挂断"><a href="#_7-4-手机微信呼叫设备-提前挂断" class="header-anchor">#</a> 7.4 手机微信呼叫设备 - 提前挂断</h3> <p>此接口仅用于在创建 session 前使用，一般用于实现忙线和拒接。创建 session 后，应使用 <code>wx_voip_session_hangup</code> 挂断。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre>WX_API <span class="token class-name">wx_operation_t</span> <span class="token function">wx_voip_listener_hangup</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>roomid<span class="token punctuation">,</span>
+                                              <span class="token class-name">wx_voip_hangup_reason_t</span> reason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>roomid</td> <td>const char *</td> <td>小程序插件端发起通话后返回的 roomid</td></tr> <tr><td>reason</td> <td>wx_voip_hangup_reason_t</td> <td>挂断 VoIP 通话的原因</td></tr></tbody></table></div><p><strong>说明</strong>
+此接口不需要 session，在 wx_init 后即可直接调用。
+若已创建了 session，则需要使用 wx_voip_session_hangup 来进行挂断。</p> <p><strong>返回值</strong></p> <p><a href="../voip-sdk/wx_operation" target="_blank"><code>wx_operation_t</code></a> wx_voip_listener_hangup()是异步函数，会发起网络请求。此异步函数返回成功，表示通话成功挂断。请留意异步操作完成之后的状态码。</p> <h3 id="_7-5-获取通话房间号-roomId"><a href="#_7-5-获取通话房间号-roomId" class="header-anchor">#</a> 7.5 获取通话房间号 roomId</h3> <p>开发者可以通过 roomId 关联接听和拨打双方，一般用于标识一次通话和串连上报信息使用。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> <span class="token function">wx_voip_session_get_roomid</span><span class="token punctuation">(</span><span class="token class-name">wx_voip_session_t</span> session<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p><strong>参数</strong></p> <div class="table-wrp"><table><thead><tr><th>属性</th> <th>类型</th> <th>说明</th></tr></thead> <tbody><tr><td>session</td> <td>wx_voip_session_t</td> <td><code>wx_voip_session_new</code> 创建的 session 对象</td></tr></tbody></table></div><p><strong>返回值</strong></p> <p>返回当前 voip 通话所在房间的标识，即 roomid。或返回空字符串。</p> <h2 id="_8-关闭-SDK"><a href="#_8-关闭-SDK" class="header-anchor">#</a> 8. 关闭 SDK</h2> <blockquote><p>头文件：<code>wmpf/wmpf.h</code>。</p></blockquote> <p>当你不再使用 SDK 所提供的功能，想要释放资源，可以调用 <code>wx_stop</code>。</p> <p>调用此函数之前，请务必确保之前的所有 <code>wx_operation</code>、<code>wx_voip_session</code> 等对象已经释放，否则可能造成未知的后果。</p> <p>成功调用此函数之后，如何你还想再次使用 SDK，那么需要重新走一遍从初始化开始的各个流程。</p> <div class="language-c extra-class"><pre class="language-c"><code v-pre><span class="token class-name">wx_error_t</span> <span class="token function">wx_stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h3 id="返回值"><a href="#返回值" class="header-anchor">#</a> 返回值</h3> <p><code>wx_error_t</code> 错误码</p> <div class="table-wrp"><table><thead><tr><th>错误码</th> <th>说明</th></tr></thead> <tbody><tr><td>WXERROR_OK</td> <td>SDK 正常关闭</td></tr></tbody></table></div><h2 id="_9-常见问题"><a href="#_9-常见问题" class="header-anchor">#</a> 9. 常见问题</h2> <h3 id="_9-1-SDK-链接失败"><a href="#_9-1-SDK-链接失败" class="header-anchor">#</a> 9.1 SDK 链接失败</h3> <p>如果你的设备芯片是 RV1109 等系列芯片时，这个芯片提供的工具链的 libstdc++.so 缺少版本信息，导致链接我们提供的 SDK 时，出现找不到 C++ 标准库相关符号的问题。微信这边不了解这个工具链对 libstdc++.so 有什么改动，出现此情况时，你应该寻求芯片厂商的技术支持。比如替换工具链中的 libstdc++.so（请你记得同时替换系统的 libstdc++.so）。</p> <h3 id="_9-2-device-key-get-fail-10008"><a href="#_9-2-device-key-get-fail-10008" class="header-anchor">#</a> 9.2 device/key/get fail: 10008</h3> <p>这说明你在调用 <code>wx_device_register</code> 函数时传入的 SNTicket 不正确或者已经过期。</p> <h3 id="_9-3-device-call-fail-9"><a href="#_9-3-device-call-fail-9" class="header-anchor">#</a> 9.3 device/call fail: 9</h3> <p>如果 SDK 日志中报该错误，意味着 SDK 检测到你要拨打的微信用户未对这个设备授权音视频拨打权限。你需要作如下检查：</p> <ol><li>小程序在通过 <code>wx.requestDeviceVoIP</code> 为这个微信用户授权设备音视频权限时：</li></ol> <ul><li>小程序提供的 OpenID 是否和设备侧拨打时传入给 <code>wx_voip_session_call</code> 的 id 一致</li> <li>小程序生成 SNTicket 时使用的 SN 是否和设备侧初始化 SDK 时传入的设备 ID 一致。
+为了检查小程序是否正确获得了微信用户的音视频拨打授权，小程序开发者可以在小程序内通过调用 <code>wx.getDeviceVoIPList</code> 函数获取当前微信用户的授权设备列表（设备 ID/SN），以此来检查微信用户是否对指定的设备（通过设备 ID/SN 来标识）授权了音视频权限。</li></ul> <ol start="2"><li>设备调用 <code>wx_voip_session_new()</code> 时，是否在 ID 处传入了设备 ID</li> <li>微信用户取消了对该设备的音视频权限授权</li></ol> <ul><li>微信用户在微信的“最近”页面中将小程序删除</li> <li>微信用户在小程序的设置页面中取消了订阅
+以上两种情况均会导致微信用户取消对该设备的音视频授权。SDK 需要遇到该错误后（通过判断 <code>wx_voip_session_call</code> 返回值是否是 <code>WXERROR_PERMISSION_DENIED</code>），应当正确处理这种情况，并向设备用户提示该情况。如提醒设备用户“由于微信用户取消了对该设备的授权，您将无法拨打电话给该微信用户”等。</li></ul> <h3 id="_9-4-device-call-fail-12"><a href="#_9-4-device-call-fail-12" class="header-anchor">#</a> 9.4 device/call fail: 12</h3> <p>如果 SDK 日志中报该错误，有两种情况：</p> <h4 id="小程序未开通音视频权限"><a href="#小程序未开通音视频权限" class="header-anchor">#</a> 小程序未开通音视频权限</h4> <p>如果你的小程序在小程序后台未开通音视频权限，则需要先开通。</p> <p>由于小程序正式版的音视频权限的开通需要寄送设备审核，对于设备端开发人员，可以将 init_config-&gt;wxa_flavor = WX_WXA_FLAVOR_DEMO 即体验版或者 WX_WXA_FLAVOR_DEBUG 即小程序开发版。至于使用哪种版本，请咨询你们的小程序端开发人员。</p> <p>如果需要使用小程序开发版，那么设备端开发人员需要取得小程序的开发者权限，而且扫描小程序端开发人员的微信开发者工具的真机调试二维码下载小程序的开发版。</p> <p>如果需要使用小程序体验版，那么设备端开发人员需要取得小程序的体验权限，具体请咨询你们的小程序端开发人员。</p> <h4 id="SDK-校验设备安全失败"><a href="#SDK-校验设备安全失败" class="header-anchor">#</a> SDK 校验设备安全失败</h4> <p>首先，你需要检查 SDK 日志中是否包含如下内容：</p> <div class="language- extra-class"><pre class="language-text"><code v-pre>CallerTicket gained, you now can create voip session for IoT scene
+</code></pre></div><p>如果不包含上述日志，说明 SDK 确实校验设备安全失败。</p> <p>此时你应该注意查看你传递给 SDK 的 data 目录下是否存在 cert 文件、rpmb_key 文件和 rpmb_data 文件。你需要保证 data 目录的磁盘空间足以保存这些文件，而且这些文件需要持久化，不可以在固件升级时被覆盖或删除，不能给篡改。如果这些文件被篡改，您可能会在遇到 OperateWxData fail: 12 之前遇到别的错误。</p> <h3 id="_9-5-device-call-fail-13"><a href="#_9-5-device-call-fail-13" class="header-anchor">#</a> 9.5 device/call fail: 13</h3> <p>如果 SDK 日志中报该错误，意味着你在该设备已经初始化过一次 SDK 之后，更换了设备 ID。</p> <p>需要注意，设备 ID 必须和设备为一一映射关系，而且一台设备上的设备 ID 不应该变更。如果你遇到了该错误，你应该使用最初初始化过设备的设备 ID 初始化 SDK，而不是更换设备 ID。</p> <h3 id="_9-6-device-call-fail-20"><a href="#_9-6-device-call-fail-20" class="header-anchor">#</a> 9.6 device/call fail: 20</h3> <p>传入的 OpenID 不正确，不是合法的 OpenID。请确保传入的 OpenID 由小程序 wx.login 获得。</p> <h3 id="_9-7-device-register-HTTP-0-XX"><a href="#_9-7-device-register-HTTP-0-XX" class="header-anchor">#</a> 9.7 device/register: HTTP 0 XX</h3> <p>这表示 SDK 在注册设备时遇到了 HTTPS 错误，这里 XX 应当是一个数字，比如 device/register: HTTP 0 77，表示错误码 77，请你对照 CURL 的错误码表查看该错误码对应错误是什么，如果该错误你能自行解决，如网络连接故障，请你自行解决。</p> <p>确保系统网络环境能访问如下域名：servicewechat.com、ae.weixin.qq.com</p> <h3 id="_9-8-device-register-errcode-9800011-errmsg-sn-ticke-不合法"><a href="#_9-8-device-register-errcode-9800011-errmsg-sn-ticke-不合法" class="header-anchor">#</a> 9.8 device/register: errcode: 9800011 errmsg: sn_ticke 不合法</h3> <p>这表示传入的 SNTicket 不正确。</p> <p>SNTicket 格式为数字和字母的组合，长度 32 个字符，不会包含其他符号。请注意不要误传其他参数，比如误传 access_token。同时，为了避免设备或者小程序获取 accesstoken 造成安全隐患，你应该在服务端提供生成 snticket 的接口给小程序和设备。</p> <h3 id="_9-9-device-register-errcode-9-errmsg-device-xxx-not-registered"><a href="#_9-9-device-register-errcode-9-errmsg-device-xxx-not-registered" class="header-anchor">#</a> 9.9 device/register: errcode: 9 errmsg: device `xxx` not registered</h3> <p>这表示给定的设备 ID 已经和某台设备绑定过了。需要注意，设备 ID 必须和设备为一一映射关系，设备 ID 不能被多台设备共用，也不能从某个设备迁移到另一个设备。也不允许一台设备更换设备 ID。如果你做了上述操作，比如在另一台设备上继续使用已经注册过的设备 ID，你应该在这个“另一台设备”上换用其他的设备 ID。</p> <h3 id="_9-10-CheckMemoryLeak-Detected-memory-leak-wx-operation-leak-objects-1"><a href="#_9-10-CheckMemoryLeak-Detected-memory-leak-wx-operation-leak-objects-1" class="header-anchor">#</a> 9.10 [CheckMemoryLeak]: Detected memory leak: wx_operation, leak objects: 1</h3> <p>这个错误日志表示你在调用 wx_voip_xxx 系列函数，或其他返回 wx_operation 对象的函数时，未处理其返回值。在调用返回 wx_operation 对象的函数时，你必须要对其返回值调用 wx_operation_await, wx_operation_wait 或者 wx_operation_destroy 以异步等待操作完成、同步等待操作完成、或者不等待操作完成，以释放 wx_operation 对象。</p> <h3 id="_9-11-Found-local-timestamp-incorrect-expected-XXX-actual-XXX"><a href="#_9-11-Found-local-timestamp-incorrect-expected-XXX-actual-XXX" class="header-anchor">#</a> 9.11 Found local timestamp incorrect, expected XXX, actual XXX</h3> <p>这个错误说明你的系统的时间戳不正确，请确保设备系统的时间戳和当前时间差距不要超过 5 秒钟.</p> <p>SDK 通过 <code>time(NULL)</code> 函数获得系统时间戳, 由于时间戳是不带时区的, 请确保通过这种方式获得时间戳和 UTC 时间匹配.</p> <h3 id="_9-12-小程序内显示设备端采集的摄像头图像被旋转了-90-度-画面拉伸变形"><a href="#_9-12-小程序内显示设备端采集的摄像头图像被旋转了-90-度-画面拉伸变形" class="header-anchor">#</a> 9.12 小程序内显示设备端采集的摄像头图像被旋转了 90 度/画面拉伸变形</h3> <p>小程序 VoIP 插件提供了 <a href="../voip-plugin/api/setUIConfig" target="_blank"><code>setUIConfig</code></a> 接口允许厂商解决旋转 90 度的问题（cameraRotation）以及画面拉伸变形问题（aspectRatio）。</p> <div class="language-js extra-class"><pre class="language-js"><code v-pre><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token comment">/* 微信版本 &lt;= 8.0.40 */</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  wmpfVoip<span class="token punctuation">.</span><span class="token function">setUIConfig</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token comment">// 设置视频通话时 caller 画面</span>
+    <span class="token literal-property property">callerUI</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">cameraRotation</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>  <span class="token comment">// caller的视频画面旋转角度，有效值为 0, 90, 180, 270。默认 0</span>
+      <span class="token literal-property property">aspectRatio</span><span class="token operator">:</span> <span class="token number">4</span><span class="token operator">/</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token comment">// 纵横比，caller的视频画面会进行适配比例，有效值 数字。默认 4/3</span>
+      <span class="token literal-property property">horMirror</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 横向镜像，boolean 值，默认 false</span>
+      <span class="token literal-property property">vertMirror</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// 竖直镜像，同上</span>
+      <span class="token literal-property property">enableToggleCamera</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// 是否支持切换摄像头，false 则不显示「摄像头开关」按钮。默认false 【该配置项在wmpf无效，wmpf默认开摄像头，且不显示开关按钮】</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="_9-13-wx-operation-validate-invalid-address-wx-operation-0xXXXXXXXXX"><a href="#_9-13-wx-operation-validate-invalid-address-wx-operation-0xXXXXXXXXX" class="header-anchor">#</a> 9.13 [wx_operation_validate]: invalid address: wx_operation 0xXXXXXXXXX</h3> <p>说明你在调用 <code>wx_operation_wait</code>、<code>wx_operation_await</code>、<code>wx_operation_destroy</code> 等函数时传入的 <code>wx_operation</code> 对象地址不正确，或者对象已经被释放. 请检查代码的正确性。</p> <h3 id="_9-14-Call-wx-camera-stream-listener-data-with-stream-0xXXXXXXXX-user-data-0xXXXXXXXX-But-it-s-released"><a href="#_9-14-Call-wx-camera-stream-listener-data-with-stream-0xXXXXXXXX-user-data-0xXXXXXXXX-But-it-s-released" class="header-anchor">#</a> 9.14 Call wx_camera_stream_listener::data with stream 0xXXXXXXXX, user_data 0xXXXXXXXX. But it's released.</h3> <p>说明你在错误的时机调用 wx_camera_stream_listener::data 函数。需要注意 wx_camera_stream open 之后才能开始调用 listener::data 函数；在 wx_camera_stream close 之后就不能调用 listener::data 函数。同时还需要注意线程安全问题。如果你通过一个列表来维护 wx_camera_stream，那么在遍历列表的时候，需要与 open、close 一起加锁避免数据竞争。</p></div> <div class="fixed-translate" style="display:none;"><span>The translations are provided by WeChat Translation and are for reference only. In case of any inconsistency and discrepancy between the Chinese version and the English version, the Chinese version shall prevail.Incorrect translation. <a href="javascript:;" class="fixed-translate-btn">Tap to report.</a></span></div></div> <!----> <div class="related"><!----> <!----></div> <footer class="page-edit"><!----></footer>  <footer class="footer"><ul class="footer-links"><li class="footer-link"><a href="http://www.tencent.com/zh-cn/index.shtml" target="_blank">关于腾讯</a></li> <li class="footer-link"><a href="https://mp.weixin.qq.com/debug/wxadoc/introduction/index.html?t=1484641676" target="_blank">文档中心</a></li> <li class="footer-link"><a href="https://kf.qq.com/faq/17030722muuu170307MFBny2.html" target="_blank">辟谣中心</a></li> <li class="footer-link"><a href="http://kf.qq.com/faq/120911VrYVrA1509086vyumm.html" target="_blank">客服中心</a></li></ul> <p class="copyright">Copyright © 2012-<span>2026</span> Tencent. All Rights Reserved.</p></footer></div></main></div> <!----></div></div> <div id="popoverWrapId" class="pop-links__wrp popover_hide"><ul class="pop-links__list"><li class="pop-links__item"><button class="pop-link">复制</button></li> <li class="pop-links__item"><button class="pop-link">问题反馈</button></li></ul></div> <div class="fixed-btns"><a href="javascript:;" class="fixed-btn fixed-btn__feedback"><div class="fixed-btn__inner"><span class="fixed-btn__icon"></span> <span class="fixed-btn__text">反馈</span></div></a> <a href="javascript:;" class="fixed-btn fixed-btn__top" style="display:none;"><div class="fixed-btn__inner"><span class="fixed-btn__icon"></span></div></a></div></div></div></div>
+    <script src="https://res.wx.qq.com/wxdoc/dist/assets/js/app.4ab8ee8b.js" defer></script><script src="https://res.wx.qq.com/wxdoc/dist/assets/js/2493.7b3d4c50.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+---
+title: "容器转场动画"
+type: source_document
+layer: L4
+owner: external
+claim_type: fact
+status: archived
+domain: mini_program
+project: wechat_miniprogram_docs
+source_type: official_web
+visibility: public
+retrieved: "2026-09-05"
+official_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/skyline/open-container.html"
+source_route: "/miniprogram/dev/framework/runtime/skyline/open-container.html"
+raw_html: "raw-html/runtime/skyline/open-container.html"
+---
+
+> 来源：微信开放文档（官方页面）
+> 原始链接：[https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/skyline/open-container.html](https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/skyline/open-container.html)
+> 抓取日期：2026-09-05
+> 原始 HTML：`raw-html/runtime/skyline/open-container.html`
+
+# 容器转场动画
+
+通过将一个元素无缝地转换为另一个元素，可以加强两个元素间的关系，如常见的瀑布流中点击卡片跳转到详情页。
+
+为降低开发成本，基础库提供了容器转场动画组件来实现该路由效果。
+
+## 效果演示
+
+[](https://res.wx.qq.com/op_res/KXGc1VPZ75N9xfw_a9BMUFLVXCE8U4DYxlfWcYfhEJVqk57pWkZ7siXB8rYkpuNKek-eK-hD4Rr-xRmnRdeafQ)
+
+## 使用方法
+
+开发者工具需升级到 `Nightly` `1.06.2403222`，基础库选择 `3.4.0`
+
+将需要进行过度的元素放置在 [`<open-container>`](open-container) 组件内，点击 [`<open-container>`](open-container)，当使用 `navigateTo` 跳转下一页面时，对其子节点和下一个页面进行过渡。
+
+```
+<open-container
+  closed-elevation="{{closedElevation}}"
+  closed-border-radius="{{closedBorderRadius}}"
+  open-elevation="{{openElevation}}"
+  open-border-radius="{{openBorderRadius}}"
+  transition-type="{{type}}"
+  transition-duration="{{duration}}"
+  bind:tap="goDetail"
+>
+  <card/>
+</open-container>
+```
+
+```
+Page({
+   goDetail() {
+    wx.navigateTo({
+      url: 'nextPageUrl'
+    })
+  }
+})
+```
+
+### 组件属性
+
+| 属性 | 类型 | 默认值 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| closed-color | string | white | 否 | 初始容器背景色 |
+| closed-elevation | number | 0 | 否 | 初始容器影深大小 |
+| closed-border-radius | number | 0 | 否 | 初始容器圆角大小 |
+| middle-color | string | '' | 否 | `fadeThrough` 模式下的过渡背景色 |
+| open-color | string | white | 否 | 打开状态下容器背景色 |
+| open-elevation | number | 0 | 否 | 打开状态下容器影深大小 |
+| open-border-radius | number | 0 | 否 | 打开状态下容器圆角大小 |
+| transition-duration | number | 300 | 否 | 动画时长 |
+| transition-type | string | fade | 否 | 动画类型 |
+
+## 示例代码片段
+
+[在开发者工具中预览效果](https://developers.weixin.qq.com/s/TMOyD8mB7YOB "在开发者工具中预览效果")
+

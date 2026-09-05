@@ -1,0 +1,40 @@
+---
+title: "视频号主页"
+type: source_document
+layer: L4
+owner: external
+claim_type: fact
+status: archived
+domain: mini_program
+project: wechat_miniprogram_docs
+source_type: official_web
+visibility: public
+retrieved: "2026-09-05"
+official_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/channels-profile.html"
+source_route: "/miniprogram/dev/framework/open-ability/channels-profile.html"
+raw_html: "raw-html/open-ability/channels-profile.html"
+---
+
+> 来源：微信开放文档（官方页面）
+> 原始链接：[https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/channels-profile.html](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/channels-profile.html)
+> 抓取日期：2026-09-05
+> 原始 HTML：`raw-html/open-ability/channels-profile.html`
+
+# 视频号主页
+
+从基础库 [2.21.2](../compatibility) 开始支持
+
+从 2023 年 12 月 20 日起，通过 [wx.openChannelsUserProfile](https://developers.weixin.qq.com/miniprogram/dev/api/open-api/channels/wx.openChannelsUserProfile.html) 跳转到视频号主页将不再受主体限制，使用此功能时请注意遵守运营规范。
+
+~~若小程序与视频号的主体相同或为关联主体，可以通过 wx.openChannelsUserProfile 跳转到视频号主页。~~
+
+~~## 主体判断逻辑~~
+
+~~若小程序与视频号的主体相同，则可以调用相关接口。~~ ~~若小程序与视频号的主体不同，需同时满足以下3个条件则可以调用相关接口：~~ ~~1. 小程序绑定了[微信开放平台](https://open.weixin.qq.com)账号~~ ~~2. 小程序与微信开放平台账号的关系为同主体或[关联主体](https://kf.qq.com/faq/190726rqmE7j190726BbeIFR.html)~~ ~~3. 微信开放平台账号的主体与关联主体列表中包含视频号的主体~~ ~~关联主体申请流程可以参考：https://kf.qq.com/faq/190726e6JFja190726qMJBn6.html~~
+
+## 参数获取
+
+`finderUserName` 表示视频号 ID，获取视频号 ID 需要登录[视频号助手](https://channels.weixin.qq.com)，在首页可以查看自己的视频号 ID。
+
+![](https://res8.wxqcloud.qq.com.cn/wxdoc/d1e379cc-7986-4de4-a94c-d958343e67ba.png)
+

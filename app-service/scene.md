@@ -1,0 +1,51 @@
+---
+title: "场景值"
+type: source_document
+layer: L4
+owner: external
+claim_type: fact
+status: archived
+domain: mini_program
+project: wechat_miniprogram_docs
+source_type: official_web
+visibility: public
+retrieved: "2026-09-05"
+official_url: "https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/scene.html"
+source_route: "/miniprogram/dev/framework/app-service/scene.html"
+raw_html: "raw-html/app-service/scene.html"
+---
+
+> 来源：微信开放文档（官方页面）
+> 原始链接：[https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/scene.html](https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/scene.html)
+> 抓取日期：2026-09-05
+> 原始 HTML：`raw-html/app-service/scene.html`
+
+# 场景值
+
+> 基础库 1.1.0 开始支持，低版本需做[兼容处理](../compatibility)。
+
+场景值用来描述用户进入小程序的路径。完整场景值的含义请查看[场景值列表](https://developers.weixin.qq.com/miniprogram/dev/reference/scene-list)。
+
+由于 Android 系统限制，目前还无法获取到按 Home 键退出到桌面，然后从桌面再次进小程序的场景值，对于这种情况，会保留上一次的场景值。
+
+## 获取场景值
+
+可以通过下列方式获取场景值：
+
+- 对于小程序，可以在 `App` 的 `onLaunch` 和 `onShow`，或 [wx.getLaunchOptionsSync](https://developers.weixin.qq.com/miniprogram/dev/api/base/app/life-cycle/wx.getLaunchOptionsSync.html) 中获取上述场景值。
+- 对于小游戏，可以在 [wx.getLaunchOptionsSync](https://developers.weixin.qq.com/miniprogram/dev/api/base/app/life-cycle/wx.getLaunchOptionsSync.html) 和 [wx.onShow](https://developers.weixin.qq.com/minigame/dev/api/base/app/life-cycle/wx.onShow.html) 中获取上述场景值。
+
+## 返回来源信息的场景
+
+部分场景值下还可以获取来源应用、公众号或小程序的appId。获取方式请参考对应API的参考文档。
+
+| 场景值 | 场景 | appId含义 |
+| --- | --- | --- |
+| 1020 | 公众号 profile 页相关小程序列表 | 来源公众号 |
+| 1035 | 公众号自定义菜单 | 来源公众号 |
+| 1036 | App 分享消息卡片 | 来源App |
+| 1037 | 小程序打开小程序 | 来源小程序 |
+| 1038 | 从另一个小程序返回 | 来源小程序 |
+| 1043 | 公众号模板消息 | 来源公众号 |
+| 1069 | 移动应用 | 来源App |
+
